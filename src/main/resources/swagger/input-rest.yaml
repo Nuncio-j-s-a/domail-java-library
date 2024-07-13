@@ -1,0 +1,745 @@
+openapi: 3.0.2
+info:
+  title: Api Documentation for DoMail server
+  description: Api Documentation for DoMail server
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+  version: "1.0"
+tags:
+- name: communication
+  description: Input Rest for communication
+- name: email
+  description: Input Rest for email
+paths:
+  /communication/{id}/detail:
+    get:
+      summary: >- 
+        Get details of given communication request by Id and RunId
+      tags:
+        - communication
+      parameters:
+        - in: path
+          name: id
+          schema: 
+            type: integer
+            format: int64
+          required: true
+          description: ID of the communication
+      responses:
+        200:
+          description: >-
+            Return communication detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/communicationDetail"
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        default:
+          $ref: "#/components/responses/default"
+
+  /communication/extid/{extId}/detail:
+    get:
+      summary: >- 
+        Get details of given communication request by ExternalId
+      tags:
+        - communication
+      parameters:
+       - in: path
+         name: extId
+         schema: 
+           $ref: '#/components/schemas/std128Regex'
+         required: true
+         description: External ID of the communication
+       
+      responses:
+        200:
+          description: >-
+            Return communication detail
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/communicationDetail"
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        default:
+          $ref: "#/components/responses/default"
+
+  /communication/{id}/state:
+    get:
+      summary: >- 
+        Get state of given communication request by Id and RunId
+      tags:
+        - communication 
+      parameters:
+        - in: path
+          name: id
+          schema: 
+            type: integer
+            format: int64
+          required: true
+          description: ID of the communication    
+      responses:
+        200:
+          description: >-
+            Return communication state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/communicationStateType"
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        default:
+          $ref: "#/components/responses/default"
+
+  /communication/extid/{extId}/state:
+    get:
+      summary: >- 
+        Get state of given communication request by ExternalId
+      tags:
+        - communication 
+      parameters:
+       - in: path
+         name: extId
+         schema: 
+           $ref: '#/components/schemas/std128Regex'
+         required: true
+         description: External ID of the communication
+      responses:
+        200:
+          description: >-
+            Return communication state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/communicationStateResponse"
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        default:
+          $ref: "#/components/responses/default"
+  /email/send:
+    post:
+      tags:
+      - email
+      summary: Send of email (simple)
+      operationId: emailSendSimple
+      requestBody:
+        description: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailSendRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communicationId'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        default:
+          $ref: "#/components/responses/default"
+
+
+  
+  /email/sendAdvanced:
+    post:
+      tags:
+      - email
+      summary: Send of email (advanced)
+      operationId: emailSendAdvanced
+      requestBody:
+        description: req
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailSendAdvancedRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communicationId'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        default:
+          $ref: "#/components/responses/default"
+
+
+  /email/sendWithTemplate:
+    post:
+      tags:
+      - email
+      summary: Send of email with template
+      operationId: emailSendWithTemplate
+      requestBody:
+        description: req
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailSendWithTemplateRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communicationTemplateId'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        default:
+          $ref: "#/components/responses/default"
+
+
+  /email/sendWithTemplateAdvanced:
+    post:
+      tags:
+      - email
+      summary: Send of email with template (Advanced)
+      operationId: emailSendWithTemplateAdvanced
+      requestBody:
+        description: req
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/emailSendWithTemplateAdvancedRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/communicationTemplateId'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        403:
+          $ref: "#/components/responses/403"
+        404:
+          $ref: "#/components/responses/404"
+        default:
+          $ref: "#/components/responses/default"
+
+
+components:
+  schemas:
+    string50:
+      type: string
+      maxLength: 50
+    string80:
+      type: string
+      maxLength: 80
+    string100:
+      type: string
+      maxLength: 100
+    string255:
+      type: string
+      maxLength: 255
+    string1024:
+      type: string
+      maxLength: 1024
+    std50Regex:
+      type: string
+      pattern: "[-0-9a-zA-Z_@#/]+"
+      maxLength: 50
+    std50RegexOpt:
+      type: string
+      maxLength: 50
+      pattern: '[-0-9a-zA-Z_@#/]*'
+    std128Regex:
+      type: string
+      pattern: "[-0-9a-zA-Z_@#/]+"
+      maxLength: 128
+    std255Regex:
+      type: string
+      pattern: "[-0-9a-zA-Z_@#/]+"
+      maxLength: 255
+    instanceId:
+      type: string
+      pattern: "^[a-zA-Z][a-zA-Z0-9_]*$"
+      maxLength: 50
+    processingStateType:
+      type: string
+      enum:
+        - RECEIVED
+        - COMPLETE
+        - FAILED
+        - DUPLICATE
+        - PROCESSING
+        - BLACKLISTED
+        - DISPATCHING
+        - DISPATCHED
+        - DISPATCH_ERROR
+        - CANCELLED
+    deliveryStateType:
+      type: string
+      enum:
+        - DELIVERY_FAILED
+        - DELIVERY_NONE
+        - DELIVERY_UNKNOWN
+        - DELIVERY_CONFIRMED
+        - DELIVERY_AMBIGUOUS
+
+    communicationTemplateId:
+      type: object
+      properties:
+        mainCommunicationId:
+          type: integer
+          format: int64
+        subCommunicationId:
+          type: array
+          items:
+            type: integer
+            format: int64
+    communicationId:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          format: int64
+    communicationStateType:
+      type: object
+      required:
+        - processingState
+        - deliveryState
+        - id
+        - runId
+      properties:
+        lastProcessingState:
+          $ref: '#/components/schemas/processingStateType'
+        lastDeliveryState:
+          $ref: '#/components/schemas/deliveryStateType'
+        id:
+          type: integer
+          format: int64
+        runs:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateRunType'
+    StateRunType:
+      type: object
+      properties:
+        processingState:
+          $ref: '#/components/schemas/processingStateType'
+        deliveryState:
+          $ref: '#/components/schemas/deliveryStateType'
+        runId:
+          type: integer
+          format: int32
+        sentEmails:
+          type: array
+          items:
+            $ref: '#/components/schemas/StateEmailType'
+    StateEmailType:
+      type: object
+      properties:
+        addressNumber:
+          type: integer
+        addressName:
+          $ref: '#/components/schemas/addressName'
+        emailAddress:
+          $ref: '#/components/schemas/emailAddress'
+        processingState:
+          $ref: '#/components/schemas/processingStateType'
+        deliveryState:
+          $ref: '#/components/schemas/deliveryStateType'
+    communicationStateResponse:
+      type: array
+      items:
+          $ref: '#/components/schemas/communicationStateType'
+    advancedRequestType:
+      type: object
+      properties:
+        priority:
+          type: boolean
+        duplicity: 
+          type: boolean
+        sendTime:
+          type: string
+          format: date-time
+
+    communicationProcDataType:
+      type: object
+      properties:
+        runId:
+          type: integer  
+        procTime:
+          type: string
+          format: date-time
+        scenarioName:
+          $ref: '#/components/schemas/string255'
+        processingState:
+          $ref: '#/components/schemas/processingStateType'
+        deliveryState:
+          $ref: '#/components/schemas/deliveryStateType'
+        sentEmails:
+          type: array
+          items: 
+            $ref: '#/components/schemas/sendCommunicationType'
+    communicationDetail:
+      type: object
+      required:
+        - id
+        - processingState
+        - deliveryState
+      properties:
+        id:
+          type: integer
+          format: int64     
+        rcvTime:
+          type: string
+          format: date-time 
+        sysId:
+          $ref: '#/components/schemas/std50Regex'
+        extId:
+          $ref: '#/components/schemas/std128Regex'
+        lastProcessingState:
+          $ref: '#/components/schemas/processingStateType'
+        lastDeliveryState:
+          $ref: '#/components/schemas/deliveryStateType'
+        scenario:
+          $ref: '#/components/schemas/std255Regex'
+        testmode:
+          type: boolean
+          default: false
+        statistics:
+          $ref: '#/components/schemas/statisticsType'
+        advancedRequestData:
+          $ref: '#/components/schemas/advancedRequestType'
+        runs:
+          type: array
+          items:
+            $ref: '#/components/schemas/communicationProcDataType'    
+    sendCommunicationType:
+      type: object
+      required:
+        - addressNumber
+        - address
+        - state
+      properties:
+        addressNumber:
+          type: integer
+        addressName:
+          $ref: '#/components/schemas/addressName'
+        emailAddress:
+          $ref: '#/components/schemas/emailAddress'
+        processingState:
+          $ref: '#/components/schemas/processingStateType'
+        deliveryState:
+          $ref: '#/components/schemas/deliveryStateType'
+        messageId:
+          $ref: '#/components/schemas/string80'
+        sendTime:
+          type: string
+          format: date-time
+    emailAddressType:
+      title: emailAddressType
+      type: object
+      required:
+        - emailAddress
+      properties:
+        addressName:
+          $ref: '#/components/schemas/addressName'
+        emailAddress:
+          $ref: '#/components/schemas/emailAddress'
+    emailAddress:
+      type: string
+      maxLength: 512
+      pattern: "[^@]+@[^.]+..+"
+    addressName:
+      type: string
+      maxLength: 200
+    addressType:
+      title: addressType
+      type: object
+      required:
+        - addresses
+      properties:
+        addresses:
+          maxItems: 100
+          type: array
+          items:
+            $ref: '#/components/schemas/emailAddressType'
+    emailSendWithTemplateRequest:
+      title: emailSendWithTemplateRequest
+      type: object
+      required:
+        - scenario
+        - params
+      properties:
+        scenario:
+          $ref: '#/components/schemas/std255Regex'
+        statistics:
+          $ref: '#/components/schemas/statisticsType'
+        testmode:
+          type: boolean
+          default: false
+        params:
+          type: array
+          items: 
+            $ref: '#/components/schemas/parametersTemplate'
+        attachments:
+          type: array
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/fileHandlerType'
+    templateDataJSON:
+      type: array
+      items:
+        type: object
+    templateDataCSV:
+        type: array
+        items:
+          $ref: '#/components/schemas/fileHandlerType'
+    emailSendWithTemplateAdvancedRequest:
+      title: emailSendWithTemplateAdvancedRequest
+      required:
+        - scenario
+        - sysId
+        - extId
+      properties:
+        scenario:
+          $ref: '#/components/schemas/std255Regex'
+        sysId:
+          $ref: '#/components/schemas/std50Regex'
+        extId:
+          $ref: '#/components/schemas/std128Regex'
+        statistics:
+          $ref: '#/components/schemas/statisticsType'
+        testmode:
+          type: boolean
+          default: false
+        advancedRequestData:
+          $ref: '#/components/schemas/advancedRequestType'
+        attachments:
+          type: array
+          maxItems: 50000
+          items:
+            $ref: '#/components/schemas/fileHandlerType'
+        templateDataJSON:
+          $ref: '#/components/schemas/templateDataJSON'
+        templateDataCSV:
+          $ref: '#/components/schemas/templateDataCSV'
+    emailSendRequest:
+      title: emailSendRequest
+      required:
+        - to
+        - scenario
+      type: object
+      properties:
+        to:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/emailAddressType'
+        subject:
+          $ref: '#/components/schemas/string255'  
+        htmlBody:
+          type: string
+        plainTextBody:
+          type: string
+        scenario:
+          $ref: '#/components/schemas/std255Regex'
+        testmode:
+          type: boolean
+          default: false
+        attachments:
+          type: array
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/fileHandlerType'
+        statistics:
+          $ref: '#/components/schemas/statisticsType'
+    emailSendAdvancedRequest:
+      allOf:
+        - $ref: '#/components/schemas/emailSendRequest'
+      required:
+        - sysId
+        - extId
+      properties:
+        sysId:
+          $ref: '#/components/schemas/std50Regex'
+        extId:
+          $ref: '#/components/schemas/std128Regex'
+        advancedRequestData:
+          $ref: '#/components/schemas/advancedRequestType'
+        additionalContent:
+          type: array
+          items: 
+            $ref: '#/components/schemas/additionalContentType'
+    parametersTemplate:
+      type: object
+      required:
+        - key
+        - value
+      properties:
+        key:
+          $ref: '#/components/schemas/std50Regex'
+        value:
+          $ref: '#/components/schemas/string1024'
+    additionalContentType:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/std50Regex'
+        value:
+          type: object
+    
+    fileHandlerType:
+      title: fileHandlerType
+      type: object
+      required:
+        - filename
+        - dataHandler
+      properties:
+        filename:
+          $ref: '#/components/schemas/string255'
+        contentID:
+          type: string
+        mimeType:
+          type: string
+        encoding:
+          type: string
+        dataHandler:
+          pattern: ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$
+          type: string
+          format: byte
+          maxLength: 30720000
+          xml:
+            name: dataHandler
+            attribute: false
+            wrapped: false
+    statisticsType:
+      title: statisticsType
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/std50Regex'
+        operation:
+          $ref: '#/components/schemas/std50Regex'
+        category:
+          $ref: '#/components/schemas/std50RegexOpt'
+        tags:
+          type: array
+          maxItems: 5
+          items: 
+            $ref: '#/components/schemas/std50Regex'
+    
+    responseCode:
+      type: string
+      enum:
+        - OK
+        - INVALID_INPUT
+        - NOT_IMPLEMENTED
+    restErrorResponse:
+      title: restErrorResponse
+      description: >- 
+        Response from API for incorrect processing.
+        For incorrect processing responseCode and message should be set.
+      type: object
+      properties: 
+        responseCode:
+          $ref: '#/components/schemas/responseCode'
+        message:
+          type: string
+  responses:
+    200NoResponse:
+      description: Operation succesfull, withour response data
+    200File:
+      description: Operation succesfull, returning binary data (file)
+      content:
+        application/xml:
+          schema:
+            type: string
+            format: binary
+    400:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/restErrorResponse"
+    401:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/restErrorResponse"
+    403:
+      description: Forbidden - authorization error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/restErrorResponse"
+    404:
+      description: Item not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/restErrorResponse"
+    409:
+      description: Conflict - for example when updating already identified register entry
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/restErrorResponse"
+    default:
+      description: Standard error response - unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/restErrorResponse"

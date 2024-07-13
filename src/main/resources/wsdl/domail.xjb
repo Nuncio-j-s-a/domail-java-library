@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<jxb:bindings version="1.0"
+	xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	xmlns:inheritance="http://jaxb2-commons.dev.java.net/basic/inheritance"
+	jxb:extensionBindingPrefixes="xjc">
+
+	<jxb:globalBindings>
+		<xjc:simple />
+		<jxb:serializable uid="1" />
+		<jxb:javaType name="java.util.Date"
+			xmlType="xsd:dateTime"
+			parseMethod="sk.dominanz.domic.common.jaxb.JaxbDateTimeConverter.parse"
+			printMethod="sk.dominanz.domic.common.jaxb.JaxbDateTimeConverter.print" />
+		<jxb:javaType name="java.util.Date" xmlType="xsd:date"
+			parseMethod="sk.dominanz.domic.common.jaxb.JaxbDateConverter.parse"
+			printMethod="sk.dominanz.domic.common.jaxb.JaxbDateConverter.print" />
+	</jxb:globalBindings>
+</jxb:bindings>

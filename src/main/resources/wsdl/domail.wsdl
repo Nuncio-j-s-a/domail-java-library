@@ -1,0 +1,1171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="domail_Communication"
+	targetNamespace="urn:dominanz.sk/domail"
+	xmlns:p1="urn:dominanz.sk/domail"
+	xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+	xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:p="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+	<wsdl:documentation />
+	<wsp:UsingPolicy wsdl:required="true" />
+	<wsp:Policy wsu:Id="OP_create"/>
+	<wsdl:types>
+		<xsd:schema targetNamespace="urn:dominanz.sk/domail"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			xmlns="urn:dominanz.sk/domail">
+			<xsd:element name="communicationResponse" type="CommunicationResponseType">
+				<!-- Element je potrebne oddelit od typu kvoli xjb bindingu ktory pridava do typu implementaciu support tried -->
+			</xsd:element>
+			<xsd:element name="createCommunicationRequest" type="CreateCommunicationRequestType">
+				<!-- Element je potrebne oddelit od typu kvoli xjb bindingu ktory pridava do typu implementaciu support tried -->
+			</xsd:element>
+			<xsd:complexType name="CreateCommunicationRequestType">
+				<xsd:sequence>
+					<xsd:element name="header" type="HeaderType"
+						form="qualified" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Header fields -
+								identification
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="address" type="AddressType"
+						form="qualified" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Communication
+								addresses
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="sendTime" type="xsd:dateTime"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Planned dispatch
+								of the communication
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="priority" type="xsd:boolean"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Priority message
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="duplicity" type="xsd:boolean"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Allow this message even when it is duplicity (duplicity tested by extId)
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="testMode" type="xsd:boolean"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Test mode
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="iContent" type="IContentType"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Dynamic Content of
+								the communication
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="eContent" type="EContentType"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Static Content of
+								the communication
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="attachments" type="AttachmentsType"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Binary attachments
+								of the communication
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="CommunicationResponseType">
+				<xsd:sequence>
+					<xsd:element name="id" type="p:long" maxOccurs="1" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:simpleType name="ScenarioType">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="255" />
+					<xsd:pattern value="[-0-9a-zA-Z_@#/]+"></xsd:pattern>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="Std50RegexType">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="50" />
+					<xsd:pattern value="[-0-9a-zA-Z_@#/]+"></xsd:pattern>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="Std255RegexType">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="255" />
+					<xsd:pattern value="[-0-9a-zA-Z_@#/]+"></xsd:pattern>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="InstanceType">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="50" />
+					<xsd:pattern value="^[a-zA-Z][a-zA-Z0-9_]*$"></xsd:pattern>
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="Std128RegexType">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="128" />
+					<xsd:pattern value="[-0-9a-zA-Z_@#/]+"></xsd:pattern>
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="ContactNameType">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="200" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="ParameterValueType">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="1024" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="TextType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="plainText" />
+					<xsd:enumeration value="smsText" />
+					<xsd:enumeration value="htmlText" />
+					<xsd:enumeration value="subjectText" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="ContactTypeType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Sms" />
+					<xsd:enumeration value="Email" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="ContactValueType">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="200" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="HeaderType">
+				<xsd:sequence>
+					<xsd:element name="sysId" type="Std50RegexType"
+						form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								System Id
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="extId" type="Std128RegexType"
+						form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								External Id
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="instance" type="InstanceType"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Instance of request (source system)
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="scenario" type="ScenarioType"
+						form="qualified" maxOccurs="1" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Scenario code usable to resolve communication scenario - if specified, scenario is assigned directly based on this value (if exists).
+								Otherwise scenario is assigned based on scenario script.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="operation" type="Std50RegexType"
+						form="qualified" maxOccurs="1" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Secondary statistical level of communication</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="category" type="Std50RegexType"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">Tertiary statistical level of communication</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="tags" type="Std255RegexType"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Communication tags
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="group" type="Std50RegexType" maxOccurs="1" minOccurs="0"  form="qualified">
+						<xsd:annotation>
+							<xsd:documentation>Primary statistical level of communication. Can be used in scenario script to assign suitable scenario</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="IContentType">
+				<xsd:sequence>
+					<xsd:element name="itemList" type="ItemListType"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Simple structure of
+								items
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="groupList" type="GroupListType"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Complex structure
+								of items
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ItemType">
+				<xsd:simpleContent>
+					<xsd:extension base="xsd:string">
+						<xsd:attribute name="id" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation xml:lang="en">
+									Identification of
+									the item
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+					</xsd:extension>
+				</xsd:simpleContent>
+			</xsd:complexType>
+			<xsd:complexType name="ItemListType">
+				<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+					<xsd:element name="item" type="ItemType"
+						form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Item of simple
+								structure
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="AttachmentsType">
+				<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+					<xsd:element name="attachment" type="FileHandlerType"
+						form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Attachment
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="GroupListType">
+				<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+					<xsd:element name="group" type="GroupType"
+						form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Item of complex
+								structure
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="AddressType">
+				<xsd:sequence maxOccurs="unbounded">
+					<xsd:element name="contact" type="ContactType"
+						form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Contact
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="GroupType">
+				<xsd:sequence>
+					<xsd:element name="itemList" type="ItemListType"
+						minOccurs="0" form="qualified" />
+				</xsd:sequence>
+				<xsd:attribute name="id" type="xsd:string">
+					<xsd:annotation>
+						<xsd:documentation xml:lang="en">
+							Identification of
+							complex structure
+						</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:complexType>
+			<xsd:complexType name="EItemType">
+				<xsd:simpleContent>
+					<xsd:extension base="xsd:string">
+						<xsd:attribute name="type" type="TextType">
+							<xsd:annotation>
+								<xsd:documentation xml:lang="en">
+									Type of external
+									content
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+					</xsd:extension>
+				</xsd:simpleContent>
+			</xsd:complexType>
+			<xsd:complexType name="EContentType">
+				<xsd:sequence minOccurs="0" maxOccurs="unbounded">
+					<xsd:element name="item" type="EItemType"
+						form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								External content
+								value
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="FileHandlerType">
+				<xsd:sequence>
+					<xsd:element name="filename" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Filename
+							</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1"></xsd:minLength>
+								<xsd:maxLength value="255"></xsd:maxLength>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="contentID" type="xsd:string"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation>Content ID</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="mimeType" type="xsd:string"
+						form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								ContentType
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="encoding" type="xsd:string"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Encoding
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="dataHandler" form="qualified"
+						minOccurs="1" maxOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Attachment Content
+							</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:base64Binary">
+								<xsd:minLength value="1"></xsd:minLength>
+								<xsd:maxLength value="30720000"></xsd:maxLength>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ContactType">
+				<xsd:simpleContent>
+					<xsd:extension base="ContactValueType">
+						<xsd:attribute name="type" type="ContactTypeType">
+							<xsd:annotation>
+								<xsd:documentation xml:lang="en">
+									Type of contact
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+						<xsd:attribute name="name" type="ContactNameType">
+							<xsd:annotation>
+								<xsd:documentation xml:lang="en">
+									Name of contact
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:attribute>
+					</xsd:extension>
+				</xsd:simpleContent>
+			</xsd:complexType>
+			<xsd:element name="createCommunicationFromTemplate" type="CreateCommunicationFromTemplateType">
+				<!-- Element je potrebne oddelit od typu kvoli xjb bindingu ktory pridava do typu implementaciu support tried -->
+			</xsd:element>
+			<xsd:complexType name="CreateCommunicationFromTemplateType">
+				<xsd:sequence>
+					<xsd:element name="header" type="HeaderType"
+						form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Header fields -
+								identification
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+					<xsd:element name="sendTime" type="xsd:dateTime"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Planned dispatch
+								of the communication
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="priority" type="xsd:boolean"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Priority message
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="duplicity" type="xsd:boolean"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Duplicity message
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="testMode" type="xsd:boolean"
+						minOccurs="0" form="qualified">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Test mode
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+
+					<xsd:element name="attachments" type="AttachmentsType"
+						minOccurs="1" form="qualified" maxOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation xml:lang="en">
+								Binary attachments
+								of the communication
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+					<xsd:element name="templateDataJSON"
+            			type="templateDataJSONType" minOccurs="0"
+            			maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="templateDataCSV" type="templateDataCSVType" minOccurs="0" maxOccurs="1"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+
+			<xsd:simpleType name="Std50Type">
+				<xsd:restriction base="xsd:string">
+					<xsd:maxLength value="50"></xsd:maxLength>
+				</xsd:restriction>
+			</xsd:simpleType>
+
+
+
+			<xsd:complexType name="EmailAddressType">
+				<xsd:annotation>
+					<xsd:documentation>
+						email type
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="name" minOccurs="0"
+						maxOccurs="1">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1"></xsd:minLength>
+								<xsd:maxLength value="255"></xsd:maxLength>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="emailAddress" minOccurs="1"
+						maxOccurs="1">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:pattern value="[^@]+@[^\.]+\..+"></xsd:pattern>
+								<xsd:minLength value="1"></xsd:minLength>
+								<xsd:maxLength value="512"></xsd:maxLength>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:simpleType name="SubjectType">
+				<xsd:annotation>
+					<xsd:documentation>Type definition for email subject.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:minLength value="0"></xsd:minLength>
+					<xsd:maxLength value="255"></xsd:maxLength>
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="HtmlTextType">
+				<xsd:restriction base="xsd:string">
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="PlainTextType">
+				<xsd:restriction base="xsd:string">
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:element name="emailSendRequestElement" type="EmailSendRequestType">
+				<!-- Element je potrebne oddelit od typu kvoli xjb bindingu ktory pridava do typu implementaciu support tried -->
+			</xsd:element>
+			<xsd:complexType name="EmailSendRequestType">
+				<xsd:sequence>
+
+					<xsd:element name="to" type="EmailAddressType"
+						minOccurs="1" maxOccurs="100">
+					</xsd:element>
+					<xsd:element name="subject" type="SubjectType"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="htmlBody" type="HtmlTextType"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="textBody" type="PlainTextType"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="attachment"
+						type="FileHandlerType" minOccurs="0" maxOccurs="20">
+					</xsd:element>
+					<xsd:element name="scenario" type="ScenarioType"
+						minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="testMode" type="xsd:boolean"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="statistics" type="StatisticsType" minOccurs="0" maxOccurs="1"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:element name="emailSendAdvRequest" type="EmailSendAdvRequestType">
+				<!-- Element je potrebne oddelit od typu kvoli xjb bindingu ktory pridava do typu implementaciu support tried -->
+			</xsd:element>
+			<xsd:complexType name="EmailSendAdvRequestType">
+				<xsd:sequence>
+					<xsd:element name="emailSendRequest"
+						type="EmailSendRequestType">
+					</xsd:element>
+					<xsd:element name="sysId" type="Std50RegexType"
+						minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="extId" type="Std128RegexType"
+						minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="advreqdata" type="AdvReqType" minOccurs="0" maxOccurs="1"></xsd:element>
+					<xsd:element name="additionalContent"
+						type="AdditionalContentType" minOccurs="0"
+						maxOccurs="unbounded">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="AdditionalContentType">
+				<xsd:sequence>
+					<xsd:element name="key" type="Std50RegexType"></xsd:element>
+					<xsd:element name="value">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:base64Binary">
+								<xsd:minLength value="1"></xsd:minLength>
+								<xsd:maxLength value="2048000"></xsd:maxLength>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="ParametersTemplateType">
+				<xsd:sequence>
+					<xsd:element name="key" type="Std50RegexType" minOccurs="1" maxOccurs="1"></xsd:element>
+					<xsd:element name="value" type="ParameterValueType" minOccurs="1" maxOccurs="1">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:element name="communicationGetRequest" type="CommunicationGetRequestType">
+				<!-- Element je potrebne oddelit od typu kvoli xjb bindingu ktory pridava do typu implementaciu support tried -->
+			</xsd:element>
+			<xsd:element name="communicationGetStateRequest" type="CommunicationGetStateRequestType">
+				<!-- Element je potrebne oddelit od typu kvoli xjb bindingu ktory pridava do typu implementaciu support tried -->
+			</xsd:element>
+			<xsd:complexType name="CommunicationGetStateRequestType">
+				<xsd:sequence>
+					<xsd:element name="id" type="p:long" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="extID" type="Std128RegexType" minOccurs="0" maxOccurs="1"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="CommunicationGetRequestType">
+				<xsd:sequence>
+					<xsd:element name="id" type="p:long" maxOccurs="1" minOccurs="0"></xsd:element>
+					<xsd:element name="extID" type="Std128RegexType" minOccurs="0" maxOccurs="1"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="communicationGetStateResponse" type="CommunicationGetStateResponseType">
+				<!-- Element je potrebne oddelit od typu kvoli xjb bindingu ktory pridava do typu implementaciu support tried -->
+			</xsd:element>
+			<xsd:complexType name="CommunicationGetStateResponseType">
+				<xsd:sequence>
+					<xsd:element name="state"
+						type="CommunicationStateType" minOccurs="0" maxOccurs="unbounded">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="emailSendWithTemplateResponse" type="EmailSendWithTemplateResponseType">
+				<!-- Element je potrebne oddelit od typu kvoli xjb bindingu ktory pridava do typu implementaciu support tried -->
+			</xsd:element>
+			<xsd:complexType name="EmailSendWithTemplateResponseType">
+				<xsd:sequence>
+					<xsd:element name="metaCommunication"
+						type="p:long" minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="subCommunication"
+						type="p:long" minOccurs="0" maxOccurs="unbounded">
+					</xsd:element>
+
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:element name="communicationGetResponse" type="CommunicationGetResponseType">
+				<!-- Element je potrebne oddelit od typu kvoli xjb bindingu ktory pridava do typu implementaciu support tried -->
+			</xsd:element>
+			<xsd:complexType name="CommunicationGetResponseType">
+				<xsd:sequence>
+					<xsd:element name="detail"
+						type="CommunicationDetailType" minOccurs="0" maxOccurs="unbounded">
+					</xsd:element>
+
+				</xsd:sequence>
+			</xsd:complexType>
+
+
+			<xsd:complexType name="CommunicationStateType">
+				<xsd:sequence>
+					<xsd:element name="id" type="p:long" minOccurs="1" maxOccurs="1"></xsd:element>
+					<xsd:element name="lastState" type="StateType" minOccurs="1" maxOccurs="1"></xsd:element>
+					<xsd:element name="runs" type="StateRunType" minOccurs="1" maxOccurs="unbounded"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="StateRunType">
+				<xsd:sequence>
+					<xsd:element name="runId" type="xsd:int" minOccurs="1" maxOccurs="1"></xsd:element>
+					<xsd:element name="state" type="StateType" minOccurs="1" maxOccurs="1"></xsd:element>
+					<xsd:element name="sentEmails" type="StateEmailType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="StateEmailType">
+				<xsd:sequence>
+					<xsd:element name="addressNumber" type="xsd:int"
+            			minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="address" type="EmailAddressType"
+            			minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="state"
+            			type="StateType" minOccurs="1" maxOccurs="1">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="StateType">
+				<xsd:sequence>
+					<xsd:element name="processingState" minOccurs="1"
+						maxOccurs="1">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:enumeration value="RECEIVED"></xsd:enumeration>
+								<xsd:enumeration value="COMPLETE"></xsd:enumeration>
+								<xsd:enumeration value="FAILED"></xsd:enumeration>
+								<xsd:enumeration value="DUPLICATE"></xsd:enumeration>
+								<xsd:enumeration value="PROCESSING"></xsd:enumeration>
+								<xsd:enumeration value="BLACKLISTED"></xsd:enumeration>
+								<xsd:enumeration value="DISPATCHING"></xsd:enumeration>
+								<xsd:enumeration value="DISPATCHED"></xsd:enumeration>
+								<xsd:enumeration
+									value="DISPATCH_ERROR">
+								</xsd:enumeration>
+								<xsd:enumeration value="CANCELLED"></xsd:enumeration>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="deliveryState" minOccurs="1"
+						maxOccurs="1">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:enumeration
+									value="DELIVERY_FAILED">
+								</xsd:enumeration>
+								<xsd:enumeration
+									value="DELIVERY_NONE">
+								</xsd:enumeration>
+								<xsd:enumeration
+									value="DELIVERY_UNKNOWN">
+								</xsd:enumeration>
+								<xsd:enumeration
+									value="DELIVERY_CONFIRMED">
+								</xsd:enumeration>
+								<xsd:enumeration
+									value="DELIVERY_AMBIGUOUS">
+								</xsd:enumeration>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="CommunicationDetailType">
+				<xsd:sequence>
+					<xsd:element name="id" type="p:long" maxOccurs="1" minOccurs="1"></xsd:element>
+					<xsd:element name="sysId" type="Std50RegexType"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="extId" type="Std128RegexType"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="lastState"
+						type="StateType" minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="scenario" type="ScenarioType"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="statistics" type="StatisticsType"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="testMode" type="xsd:boolean"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="rcvTime" type="xsd:dateTime"
+            			maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="advancedReqData"
+						type="AdvReqType" minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="runs"
+						type="CommunicationProcDataType" minOccurs="1" maxOccurs="unbounded">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="StatisticsType">
+				<xsd:sequence id="statistics" minOccurs="0"
+					maxOccurs="1">
+					<xsd:element name="group" type="Std50RegexType"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="operation"
+						type="Std50RegexType" minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="category"
+						type="Std50RegexType" minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="tag"
+						type="Std50RegexType" minOccurs="0" maxOccurs="5">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="AdvReqType">
+				<xsd:sequence>
+					<xsd:element name="priority" type="xsd:boolean"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="duplicity" type="xsd:boolean"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="sendTime" type="xsd:dateTime"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="CommunicationProcDataType">
+				<xsd:sequence>
+					<xsd:element name="runId" type="xsd:int"
+            			maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="procTime" type="xsd:dateTime"
+            			minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="scenarioName" minOccurs="0"
+            			maxOccurs="1" type="ScenarioType">
+					</xsd:element>
+					<xsd:element name="state" minOccurs="1"
+            			maxOccurs="1" type="StateType">
+					</xsd:element>
+					<xsd:element name="sentEmails" type="SendCommunicationType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="SendCommunicationType">
+				<xsd:sequence>
+					<xsd:element name="addressNumber" type="xsd:int"
+            			minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="address" type="EmailAddressType"
+            			minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="state"
+            			type="StateType" minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="messageId" minOccurs="0" maxOccurs="1">
+
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="0"></xsd:minLength>
+								<xsd:maxLength value="80"></xsd:maxLength>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="sendTime" type="xsd:dateTime" minOccurs="0" maxOccurs="1"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:element name="emailSendWithTemplateRequest" type="EmailSendWithTemplateRequestType">
+				<!-- Element je potrebne oddelit od typu kvoli xjb bindingu ktory pridava do typu implementaciu support tried -->
+			</xsd:element>
+			<xsd:complexType name="EmailSendWithTemplateRequestType">
+				<xsd:sequence>
+					<xsd:element name="scenario" type="ScenarioType"
+            			minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="statistics" type="StatisticsType"
+            			minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="testMode" type="xsd:boolean"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="fillParams"
+            			type="ParametersTemplateType" minOccurs="1"
+            			maxOccurs="unbounded">
+					</xsd:element>
+					<xsd:element name="attachments" type="FileHandlerType" minOccurs="0" maxOccurs="20"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:element name="emailSendWithTemplateAdvRequest" type="EmailSendWithTemplateAdvRequestType">
+				<!-- Element je potrebne oddelit od typu kvoli xjb bindingu ktory pridava do typu implementaciu support tried -->
+			</xsd:element>
+			<xsd:complexType
+            	name="EmailSendWithTemplateAdvRequestType">
+				<xsd:sequence>
+					<xsd:element name="scenario" type="ScenarioType"
+            			minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="sysId" type="Std50RegexType"
+            			minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="extId" type="Std128RegexType"
+            			minOccurs="1" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="statistics" type="StatisticsType"
+            			minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="testMode" type="xsd:boolean"
+						minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="advReqData" type="AdvReqType"
+            			minOccurs="0" maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="attachments"
+            			type="FileHandlerType" minOccurs="0"
+            			maxOccurs="unbounded">
+					</xsd:element>
+					<xsd:element name="templateDataJSON"
+            			type="templateDataJSONType" minOccurs="0"
+            			maxOccurs="1">
+					</xsd:element>
+					<xsd:element name="templateDataCSV" type="templateDataCSVType" minOccurs="0" maxOccurs="1"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="templateDataJSONType">
+				<xsd:sequence>
+					<xsd:element name="JSONData" minOccurs="1"
+            			maxOccurs="1" nillable="false">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:base64Binary">
+								<xsd:minLength value="1"></xsd:minLength>
+								<xsd:maxLength value="4096000"></xsd:maxLength>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="templateDataCSVType">
+				<xsd:sequence>
+					<xsd:element name="CSVFiles" type="FileHandlerType" minOccurs="1" maxOccurs="unbounded"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="messageCreateCommunicationRequest">
+		<wsdl:documentation />
+		<wsdl:part name="partCreateCommunicationRequest"
+			element="p1:createCommunicationRequest" />
+	</wsdl:message>
+	<wsdl:message name="_createFromTemplateRequest">
+		<wsdl:part name="partCreateCommunicationFromTemplateRequest" element="p1:createCommunicationFromTemplate"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="_createFromTemplateResponse">
+		<wsdl:part name="response"
+			element="p1:emailSendWithTemplateResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="_createResponse">
+		<wsdl:part name="partCreateCommunicationResponse"
+			element="p1:communicationResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="emailSendRequest">
+		<wsdl:part name="emailSendRequest"
+			element="p1:emailSendRequestElement">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="emailSendResponse">
+		<wsdl:part name="response"
+			element="p1:communicationResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="emailSendAdvRequest">
+		<wsdl:part name="emailSendAdvRequest"
+			element="p1:emailSendAdvRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="emailSendAdvResponse">
+		<wsdl:part name="response" element="p1:communicationResponse"></wsdl:part>
+	</wsdl:message>
+
+
+
+	<wsdl:message name="emailSendWithTemplateAdvRequest">
+		<wsdl:part name="emailSendWithTemplateAdvRequest"
+			element="p1:emailSendWithTemplateAdvRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="emailSendWithTemplateAdvResponse">
+		<wsdl:part name="response" element="p1:emailSendWithTemplateResponse"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:message name="emailSendWithTemplateRequest">
+		<wsdl:part name="emailSendWithTemplateRequest" element="p1:emailSendWithTemplateRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="emailSendWithTemplateResponse">
+		<wsdl:part name="response" element="p1:emailSendWithTemplateResponse"></wsdl:part>
+	</wsdl:message>
+
+
+	<wsdl:message name="communicationGetStateRequest">
+		<wsdl:part name="communicationGetStateRequest"
+			element="p1:communicationGetStateRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="communicationGetStateResponse">
+		<wsdl:part name="response"
+			element="p1:communicationGetStateResponse">
+		</wsdl:part>
+	</wsdl:message>
+
+
+
+
+	<wsdl:message name="communicationGetRequest">
+		<wsdl:part name="communicationGetRequest"
+			element="p1:communicationGetRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="communicationGetResponse">
+		<wsdl:part name="response"
+			element="p1:communicationGetResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="domail_Communication">
+		<wsdl:documentation />
+		<wsdl:operation name="_create">
+			<wsdl:documentation />
+			<wsp:Policy>
+				<wsp:PolicyReference URI="#OP_create" />
+			</wsp:Policy>
+			<wsdl:input message="p1:messageCreateCommunicationRequest" />
+			<wsdl:output message="p1:_createResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="_createFromTemplate">
+			<wsdl:input message="p1:_createFromTemplateRequest"></wsdl:input>
+			<wsdl:output message="p1:_createFromTemplateResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="emailSend">
+			<wsdl:input message="p1:emailSendRequest"></wsdl:input>
+			<wsdl:output message="p1:emailSendResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="emailSendAdv">
+			<wsdl:input message="p1:emailSendAdvRequest"></wsdl:input>
+			<wsdl:output message="p1:emailSendAdvResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="communicationGet">
+			<wsdl:input message="p1:communicationGetRequest"></wsdl:input>
+			<wsdl:output message="p1:communicationGetResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="communicationGetState">
+			<wsdl:input message="p1:communicationGetStateRequest"></wsdl:input>
+			<wsdl:output message="p1:communicationGetStateResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="emailSendWithTemplateAdv">
+			<wsdl:input message="p1:emailSendWithTemplateAdvRequest" name="request"></wsdl:input>
+			<wsdl:output message="p1:emailSendWithTemplateAdvResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="emailSendWithTemplate">
+			<wsdl:input message="p1:emailSendWithTemplateRequest"></wsdl:input>
+			<wsdl:output message="p1:emailSendWithTemplateResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="domail_CommunicationBinding"
+		type="p1:domail_Communication">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="_create">
+			<soap:operation soapAction="urn:dominanz.sk/domail/_create" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="_createFromTemplate">
+			<soap:operation
+				soapAction="urn:dominanz.sk/domail/_createFromTemplate" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="emailSend">
+			<soap:operation
+				soapAction="urn:dominanz.sk/domail/emailSend" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="emailSendAdv">
+			<soap:operation
+				soapAction="urn:dominanz.sk/domail/emailSendAdv" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="communicationGet">
+			<soap:operation
+				soapAction="urn:dominanz.sk/domail/communicationGet" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="communicationGetState">
+			<soap:operation
+				soapAction="urn:dominanz.sk/domail/communicationGetState" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="emailSendWithTemplateAdv">
+			<soap:operation
+				soapAction="urn:dominanz.sk/domail/emailSendWithTemplateAdv" />
+			<wsdl:input name="request">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="emailSendWithTemplate">
+			<soap:operation
+				soapAction="urn:dominanz.sk/domail/emailSendWithTemplate" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service
+		name="dominanz_domail_Communication">
+		<wsdl:port name="HTTP_Port"
+			binding="p1:domail_CommunicationBinding">
+			<soap:address
+				location="http://dominanz.sk:8090/domail/MessageServlet?senderParty=&amp;senderService=dominanz&amp;receiverParty=&amp;receiverService=&amp;interface=domail_Communication&amp;interfaceNamespace=urn%3Adominanz.sk%2Fdomail"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+		</wsdl:port>
+		<wsdl:port name="HTTPS_Port"
+			binding="p1:domail_CommunicationBinding">
+			<soap:address
+				location="https://dominanz.sk:443/domail/MessageServlet?senderParty=&amp;senderService=dominanz&amp;receiverParty=&amp;receiverService=&amp;interface=domail_Communication&amp;interfaceNamespace=urn%3Adominanz.sk%2Fdomail"
+				xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

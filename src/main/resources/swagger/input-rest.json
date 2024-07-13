@@ -1,0 +1,14 @@
+{
+  "interfaceOnly": "true",
+  "dateLibrary": "java8-localdatetime",
+  "apiPackage": "sk.dominanz.domail.input.rest.api",
+  "modelPackage": "sk.dominanz.domail.input.rest.model",
+  "invokerPackage": "sk.dominanz.domail.input.rest.util",
+  "packageName": "sk.dominanz.domail.input.rest.util",
+  "generateModelDocumentation": "true",
+  "generateApiDocumentation": "true",
+  "importMappings": {
+  	"java.time.OffsetDateTime":"java.time.LocalDateTime"
+  },
+  "typeMappings" : {"OffsetDateTime":"LocalDateTime" }
+}
